@@ -95,7 +95,6 @@ export default function App() {
           />
 
           <Galaxy
-            texturePath="/textures/steller-forge.jpg"
             position={[0, 0, -1240]}
           />
         </Canvas>

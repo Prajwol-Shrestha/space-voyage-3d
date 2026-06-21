@@ -81,14 +81,12 @@ export default function Galaxy({
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            array={positions}
-            itemSize={3}
+            args={[positions, 3]}
             count={count}
           />
           <bufferAttribute
             attach="attributes-color"
-            array={colors}
-            itemSize={3}
+            args={[colors, 3]}
             count={count}
           />
         </bufferGeometry>

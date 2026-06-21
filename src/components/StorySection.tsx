@@ -1,7 +1,12 @@
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
 
-export default function StorySection({ title, description }) {
+interface IProps{
+  title: string;
+  description: string
+}
+
+export default function StorySection({ title, description }: IProps) {
   const elementRef = useRef(null);
 
   useEffect(() => {
