@@ -23,7 +23,7 @@ export default function FlyingCamera({ startZ, endZ }: FlyingCameraProps) {
         trigger: "html",
         start: "top top",
         end: "bottom bottom",
-        scrub: 1,
+        scrub: 2,
       },
     });
 

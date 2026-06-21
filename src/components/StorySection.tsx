@@ -16,8 +16,8 @@ export default function StorySection({ title, description }) {
         duration: 1,
         scrollTrigger: {
           trigger: el,
-          start: "top 80%",
-          end: "top 20%",
+          start: "top 75%",
+          end: "top 30%",
           toggleActions: "play reverse play reverse",
           scrub: true,
         },

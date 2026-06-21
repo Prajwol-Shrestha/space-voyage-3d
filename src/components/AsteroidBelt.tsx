@@ -8,49 +8,64 @@ interface AsteroidBeltProps {
   count?: number;
 }
 
+function getRandomGeometry(size: number): THREE.BufferGeometry {
+  const type = Math.floor(Math.random() * 3);
+  switch (type) {
+    case 0:
+      // Icosahedron — rounder, like a large rocky body
+      return new THREE.IcosahedronGeometry(size, 0);
+    case 1:
+      // Dodecahedron — 12 faces, slightly more angular
+      return new THREE.DodecahedronGeometry(size, 0);
+    case 2:
+    default:
+      // Tetrahedron — very jagged and sharp, like a small fragment
+      return new THREE.TetrahedronGeometry(size, 0);
+  }
+}
+
 export default function AsteroidBelt({
   position = [0, 0, -220],
   count = 320,
 }: AsteroidBeltProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
 
-  const rockTexture = useTexture({
-    map: "/textures/asteroid/rock_color.jpg",
-    normalMap: "/textures/asteroid/rock_normalGL.jpg",
-    roughnessMap: "/textures/asteroid/rock_roughness.jpg",
-    aoMap: "/textures/asteroid/rock_ambientOcclusion.jpg",
-  });
+  const [colorMap, normalMap, roughnessMap] = useTexture([
+    "/textures/asteroid/rock_color.jpg",
+    "/textures/asteroid/rock_normalGL.jpg",
+    "/textures/asteroid/rock_roughness.jpg",
+  ]);
 
+  // Non-uniform scale per asteroid — stretches the geometry so
+  // no two look the same even if they share the same base shape
   const asteroids = useMemo(() => {
     return Array.from({ length: count }, () => {
       const radius = 8 + Math.random() * 10;
       const angle = Math.random() * Math.PI * 2;
-
       const yScatter = (Math.random() - 0.5) * 2.5;
 
-      const x = Math.cos(angle) * radius;
-      const y = yScatter;
-      const z = Math.sin(angle) * radius;
-
-      const size = 0.04 + Math.pow(Math.random(), 4) * 0.65;
-      const rotX = Math.random() * Math.PI * 2;
-      const rotY = Math.random() * Math.PI * 2;
-      const rotZ = Math.random() * Math.PI * 2;
-
-      const spinSpeed = (Math.random() - 0.5) * 0.8;
-
       return {
-        position: [x, y, z] as [number, number, number],
-        size,
-        rotX,
-        rotY,
-        rotZ,
-        spinSpeed,
+        position: [
+          Math.cos(angle) * radius,
+          yScatter,
+          Math.sin(angle) * radius,
+        ] as [number, number, number],
+
+        size: 0.06 + Math.pow(Math.random(), 3) * 0.5,
+
+        scaleX: 0.7 + Math.random() * 0.8,
+        scaleY: 0.5 + Math.random() * 0.7,
+        scaleZ: 0.6 + Math.random() * 0.9,
+
+        rotX: Math.random() * Math.PI * 2,
+        rotY: Math.random() * Math.PI * 2,
+        rotZ: Math.random() * Math.PI * 2,
+        spinSpeed: (Math.random() - 0.5) * 0.6,
+        geometry: getRandomGeometry(1), // size=1, we scale via mesh scale
       };
     });
   }, [count]);
-
-  const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
 
   useFrame((_, delta) => {
     if (groupRef.current) {
@@ -74,13 +89,22 @@ export default function AsteroidBelt({
           }}
           position={asteroid.position}
           rotation={[asteroid.rotX, asteroid.rotY, asteroid.rotZ]}
+          scale={[
+            asteroid.size * asteroid.scaleX,
+            asteroid.size * asteroid.scaleY,
+            asteroid.size * asteroid.scaleZ,
+          ]}
         >
-          <dodecahedronGeometry args={[asteroid.size, 0]} />
+          <primitive object={asteroid.geometry} />
           <meshStandardMaterial
-            {...rockTexture}
-            normalScale={new THREE.Vector2(1.5, 1.5)}
-            roughness={1}
-            metalness={0}
+            map={colorMap}
+            normalMap={normalMap}
+            normalScale={new THREE.Vector2(0.8, 0.8)}
+            roughnessMap={roughnessMap}
+            roughness={0.9}
+            metalness={0.0}
+            emissive={new THREE.Color(0.02, 0.02, 0.02)}
+            emissiveIntensity={1}
           />
         </mesh>
       ))}
