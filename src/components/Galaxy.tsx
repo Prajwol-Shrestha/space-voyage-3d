@@ -13,14 +13,13 @@ export default function Galaxy({
 }: GalaxyProps) {
   const pointsRef = useRef<THREE.Points>(null);
 
-  // 1. Math Generation: Compute all 4,000 particle coordinates once on load
   const [positions, colors] = useMemo(() => {
-    const posArray = new Float32Array(count * 3); // Each vertex needs 3 values: X, Y, Z
-    const colorArray = new Float32Array(count * 3); // Each vertex needs 3 values: R, G, B
+    const posArray = new Float32Array(count * 3);
+    const colorArray = new Float32Array(count * 3);
 
-    const branches = 2; // Classic two-armed spiral galaxy
-    const radius = 35; // How far out the galaxy arms stretch
-    const spin = 1.5; // How much the arms twist around the center core
+    const branches = 2;
+    const radius = 35;
+    const spin = 1.5;
 
     // Define colors using Three.js Color objects for easy blending
     const colorCore = new THREE.Color("#ffe699"); // Hot golden core

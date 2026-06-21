@@ -1,4 +1,5 @@
 import { Canvas } from "@react-three/fiber";
+import AsteroidBelt from "./components/AsteroidBelt";
 import FlyingCamera from "./components/FlyingCamera";
 import Galaxy from "./components/Galaxy";
 import Planet from "./components/Planet";
@@ -10,77 +11,83 @@ export default function App() {
       {/* layer 1 fxied canvas */}
       <div className="fixed inset-0 z-10 w-full h-full pointer-events-none">
         <Canvas
-          camera={{ fov: 60, near: 0.1, far: 2000 }}
+          camera={{ fov: 60, near: 0.1, far: 3000 }}
           gl={{ antialias: true }}
           className="w-full h-full"
         >
-          <ambientLight intensity={0.3} />
+          <ambientLight intensity={1} />
           <pointLight
             position={[0, 0, 0]}
-            intensity={3}
-            distance={1000}
-            decay={1}
+            intensity={8}
+            distance={1500}
+            decay={1.5}
           />
-
-          <FlyingCamera startZ={15} endZ={-800} />
+          {/* <directionalLight position={[0, 0, 1]} intensity={1.5} /> */}
+          <FlyingCamera startZ={15} endZ={-1400} />
 
           <Planet
             position={[0, 0, 0]}
-            color="#ffaa00"
             size={4}
             rotationSpeed={0.1}
+            texturePath="/textures/2k_sun.jpg"
           />
           <Planet
-            position={[3, 1, -40]}
-            color="#8a8d8f"
+            position={[3, 1, -141]}
             size={0.6}
             rotationSpeed={0.4}
+            texturePath="/textures/2k_mercury.jpg"
           />
           <Planet
-            position={[-4, -1, -80]}
-            color="#e3bb76"
+            position={[-4, -1, -283]}
             size={1.2}
             rotationSpeed={0.2}
+            texturePath="/textures/2k_venus_surface.jpg"
+            atmospherePath="/textures/2k_venus_atmosphere.jpg"
           />
           <Planet
-            position={[4, 2, -120]}
-            color="#2b82c9"
+            position={[4, 2, -424]}
             size={1.3}
             rotationSpeed={0.5}
+            texturePath="/textures/2k_earth_daymap.jpg"
+            normalPath="/textures/2k_earth_normal_map.jpg"
+            specularPath="/textures/2k_earth_specular_map.jpg"
+            atmospherePath="/textures/2k_earth_clouds.jpg"
           />
           <Planet
-            position={[-2, 1, -160]}
-            color="#c1440e"
+            position={[-2, 1, -566]}
             size={0.8}
             rotationSpeed={0.4}
+            texturePath="/textures/2k_mars.jpg"
           />
+          <AsteroidBelt position={[0, 0, -707]} count={320} />
 
           <Planet
-            position={[6, -2, -280]}
-            color="#b07f35"
+            position={[6, -2, -849]}
             size={2.5}
             rotationSpeed={0.8}
+            texturePath="/textures/2k_jupiter.jpg"
           />
           <Planet
-            position={[-7, 3, -360]}
-            color="#e2bf7d"
+            position={[-7, 3, -990]}
             size={2.0}
             rotationSpeed={0.7}
+            texturePath="/textures/2k_saturn.jpg"
+            ringAlphaPath="/textures/2k_saturn_ring_alpha.png"
           />
           <Planet
-            position={[5, -1, -440]}
-            color="#4b70dd"
+            position={[5, -1, -1085]}
             size={1.6}
             rotationSpeed={0.3}
+            texturePath="/textures/2k_uranus.jpg"
           />
           <Planet
-            position={[-4, -2, -520]}
-            color="#274687"
+            position={[-4, -2, -1175]}
             size={1.5}
             rotationSpeed={0.3}
+            texturePath="/textures/2k_neptune.jpg"
           />
 
-          <Galaxy count={4000} position={[0, 0, -700]} />
+          <Galaxy count={4000} position={[0, 0, -1400]} />
         </Canvas>
       </div>
 
